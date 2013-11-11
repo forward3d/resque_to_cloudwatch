@@ -1,0 +1,8 @@
+access_key_id: asdf
+secret_access_key: asdf
+region: us-west-2
+project: testing
+hostname: andy-laptop
+redis_host: some.redis.host
+redis_port: 6379
+period: 60

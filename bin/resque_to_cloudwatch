@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+require 'redis'
+require 'eventmachine'
+require 'optparse'
+require_relative '../lib/resque_to_cloudwatch'
+
+$log.info "Starting ResqueToCloudwatch"
+
+options = {}
+ 
+OptionParser.new do |opts|
+  opts.on("-c", "--config", "Config file to load") do |c|
+    options[:config] = c
+  end
+end.parse!
+
+options[:config] ||= "#{File.expand_path("../../config.yaml", __FILE__)}"
+config = ResqueToCloudwatch::Config.new(options[:config])
+collector = ResqueToCloudwatch::Collector.new(config)
+sender = ResqueToCloudwatch::Sender.new(config)
+
+$log.info "Entering EventMachine loop with period of #{config.period} seconds"
+
+EventMachine.run do
+  EventMachine.add_periodic_timer(config.period) do
+    begin
+      sender.send_value(collector.get_queue_length)
+    rescue => e
+      $log.error "Exception sending or collecting data: #{e.message}"
+    end
+  end
+end
