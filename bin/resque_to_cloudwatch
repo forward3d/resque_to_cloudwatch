@@ -10,7 +10,7 @@ $log.info "Starting ResqueToCloudwatch"
 options = {}
  
 OptionParser.new do |opts|
-  opts.on("-c", "--config", "Config file to load") do |c|
+  opts.on("-c", "--config CONFIG", "Config file to load") do |c|
     options[:config] = c
   end
 end.parse!
