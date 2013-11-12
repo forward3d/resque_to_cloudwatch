@@ -28,6 +28,9 @@ EventMachine.run do
       sender.send_value(collector.get_queue_length)
     rescue => e
       $log.error "Exception sending or collecting data: #{e.message}"
+      e.backtrace.each do |line|
+        $log.error line
+      end
     end
   end
 end
