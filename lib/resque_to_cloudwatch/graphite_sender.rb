@@ -11,7 +11,7 @@ module ResqueToCloudwatch
     def send_value(value)
       graphite = Graphite.new({:host => @config.graphite_host, :port => @config.graphite_port})
       graphite.send_metrics({
-        "resque_to_cloudwatch.#{@config.hostname}.#{@config.project}" => value
+        "resque_to_cloudwatch.#{@config.namespace}.#{@config.hostname}.#{@config.project}" => value
       })
       $log.info "GraphiteSender: sent metric value #{value}"
     end

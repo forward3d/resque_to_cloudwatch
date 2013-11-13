@@ -11,7 +11,7 @@ module ResqueToCloudwatch
     def send_value(value)
       cw = AWS::CloudWatch.new
       cw.client.put_metric_data({
-        :namespace      => 'F3D/resque_queues',
+        :namespace      => "#{@config.namespace}/resque_queues",
         :metric_data    => [
           :metric_name  => "jobs_queued",
           :dimensions   => [

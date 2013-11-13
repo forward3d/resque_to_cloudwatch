@@ -7,11 +7,12 @@ module ResqueToCloudwatch
     attr_reader :access_key_id, :secret_access_key, :project, :period, :region
     attr_reader :redis_host, :redis_port, :hostname
     attr_reader :graphite_host, :graphite_port, :enable_graphite
+    attr_reader :namespace
    
     def initialize(path)
       $log.info "Loading configuration"
       raise "Config file #{path} not found or readable" unless File.exists?(path)
-      @required_opts = %w{access_key_id secret_access_key project period region redis_host redis_port hostname}
+      @required_opts = %w{access_key_id secret_access_key project period region redis_host redis_port hostname namespace}
       @hash = YAML.load_file(path)
       raise "Config file #{path} is empty" unless @hash
       validate_config
