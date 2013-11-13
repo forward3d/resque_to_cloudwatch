@@ -6,6 +6,7 @@ module ResqueToCloudwatch
    
     attr_reader :access_key_id, :secret_access_key, :project, :period, :region
     attr_reader :redis_host, :redis_port, :hostname
+    attr_reader :graphite_host, :graphite_port, :enable_graphite
    
     def initialize(path)
       $log.info "Loading configuration"
@@ -14,9 +15,9 @@ module ResqueToCloudwatch
       @hash = YAML.load_file(path)
       raise "Config file #{path} is empty" unless @hash
       validate_config
-      @required_opts.each do |opt|
-        instance_variable_set("@#{opt}", @hash[opt])
-        $log.info "Config parameter: #{opt} is #{@hash[opt]}"
+      @hash.each_pair do |opt,value|
+        instance_variable_set("@#{opt}", value)
+        $log.info "Config parameter: #{opt} is #{value}"
       end
       
       # Set up AWS credentials
@@ -34,6 +35,12 @@ module ResqueToCloudwatch
         @hash[opt].nil?
       end
       raise "Missing options: #{missing_opts.join(", ")}" unless missing_opts.empty?
+      if @hash["enable_graphite"]
+        raise "Graphite enabled but config missing graphite_host" if @hash["graphite_host"].nil?
+        @hash["graphite_port"] ||= 2003
+      else
+        @hash["enable_graphite"] = false
+      end
     end
     
   end

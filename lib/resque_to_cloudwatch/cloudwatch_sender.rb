@@ -1,7 +1,7 @@
 require 'aws-sdk'
 
 module ResqueToCloudwatch
-  class Sender
+  class CloudwatchSender
     
     # Pass an instance of CloudwatchToResque::Config
     def initialize(config)
@@ -28,7 +28,17 @@ module ResqueToCloudwatch
           :unit  => 'Count'
         ]
       })
-      $log.info "Sent metric value #{value}"
+      $log.info "CloudwatchSender: Sent metric value #{value}"
     end
+    
+    def inspect
+      to_s
+    end
+    
+    def to_s
+      "CloudwatchSender"
+    end
+    
   end
+  
 end

@@ -18,19 +18,26 @@ end.parse!
 options[:config] ||= "#{File.expand_path("../../config.yaml", __FILE__)}"
 config = ResqueToCloudwatch::Config.new(options[:config])
 collector = ResqueToCloudwatch::Collector.new(config)
-sender = ResqueToCloudwatch::Sender.new(config)
 
+# Initialize senders we're going to use
+senders = []
+senders << ResqueToCloudwatch::CloudwatchSender.new(config)
+senders << ResqueToCloudwatch::GraphiteSender.new(config) if config.enable_graphite
+
+$log.info "Senders in use: #{senders.join(", ")}"
 $log.info "Entering EventMachine loop with period of #{config.period} seconds"
 
 EventMachine.run do
   EventMachine.add_periodic_timer(config.period) do
-    begin
-      sender.send_value(collector.get_queue_length)
-    rescue => e
-      $log.error "Exception sending or collecting data: #{e.message}"
-      e.backtrace.each do |line|
-        $log.error line
+    senders.each do |sender|
+      begin
+        sender.send_value(collector.get_queue_length)
+      rescue => e
+        $log.error "Exception sending or collecting data with sender #{sender}: #{e.message}"
+        e.backtrace.each do |line|
+          $log.error line
+        end
       end
-    end
+    end    
   end
 end
