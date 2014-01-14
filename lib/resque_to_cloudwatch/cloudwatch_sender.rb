@@ -11,9 +11,9 @@ module ResqueToCloudwatch
     def send_value(value, metric_name)
       cw = AWS::CloudWatch.new
       cw.client.put_metric_data({
-        :namespace      => "#{@config.namespace}/#{metric_name}",
+        :namespace      => "#{@config.namespace}/resque",
         :metric_data    => [
-          :metric_name  => "jobs_queued",
+          :metric_name  => metric_name,
           :dimensions   => [
             {
               :name  => 'hostname',
