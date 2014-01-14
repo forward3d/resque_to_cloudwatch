@@ -8,10 +8,10 @@ module ResqueToCloudwatch
       @config = config
     end
     
-    def send_value(value)
+    def send_value(value, metric_name)
       cw = AWS::CloudWatch.new
       cw.client.put_metric_data({
-        :namespace      => "#{@config.namespace}/resque_queues",
+        :namespace      => "#{@config.namespace}/#{metric_name}",
         :metric_data    => [
           :metric_name  => "jobs_queued",
           :dimensions   => [
@@ -28,7 +28,7 @@ module ResqueToCloudwatch
           :unit  => 'Count'
         ]
       })
-      $log.info "CloudwatchSender: Sent metric value #{value}"
+      $log.info "CloudwatchSender: Sent metric value #{value} for #{metric_name}"
     end
     
     def inspect
