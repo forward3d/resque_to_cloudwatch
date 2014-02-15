@@ -1,8 +1,12 @@
 # resque_to_cloudwatch
 
-This is a gem containing a daemon for submitting Resque queue lengths and the number
-of Resque workers currently working to AWS Cloudwatch. In addition, it can (optionally) 
-submit this metric to Graphite.
+This is a gem containing a daemon for submitting Resque metrics to
+AWS Cloudwatch. In addition, it can (optionally) submit these metrics to Graphite.
+
+It collects and pushes the following metrics:
+* number of jobs in all Resque queues (`resque_queues`)
+* number of workers currently working (`resque_workers_working`)
+* number of workers currently alive (`resque_workers_alive`)
 
 ## Usage
 
@@ -39,11 +43,11 @@ Region of Cloudwatch the metrics should be submitted to.
 
 These can actually contain any text - they are submitted as "dimensions" along
 with the metric value. A single metric in Cloudwatch is uniquely identified by 
-its name (hardcoded to `jobs_queued` and `workers_working` in this gem), and any 
-dimensions it has. At Forward3D, we have a number of autoscaling "projects" 
+its name (hardcoded to `resque_queues`, `resque_workers_working` and `resque_workers_alive`
+in this gem), and any dimensions it has. At Forward3D, we have a number of autoscaling "projects" 
 (codebases), so we use the project dimension to represent that. Namespace is more 
 important, as that determines how the metric is categorised in the Cloudwatch interface. 
-Hostname can be anything - we set it to the hostname of the submitting machine.
+Hostname can be anything, or blank - we set it to the hostname of the submitting machine.
 
 #### `redis_host`, `redis_port`
 
