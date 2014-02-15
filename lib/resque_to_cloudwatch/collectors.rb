@@ -45,4 +45,25 @@ module ResqueToCloudwatch
     
   end
   
+  class WorkersAliveCollector
+    
+    def initialize(config)
+      @config = config
+    end
+    
+    def get_value
+      redis = Redis.new(:host => @config.redis_host, :port => @config.redis_port)
+      redis.smembers('resque:workers').length
+    end
+    
+    def metric_name
+      "resque_workers_alive"
+    end
+    
+    def to_s
+      metric_name
+    end
+    
+  end
+  
 end

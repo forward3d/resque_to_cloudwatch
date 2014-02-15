@@ -29,6 +29,7 @@ $log.info "Entering EventMachine loop with period of #{config.period} seconds"
 collectors = []
 collectors << ResqueToCloudwatch::QueueLengthCollector.new(config)
 collectors << ResqueToCloudwatch::WorkersWorkingCollector.new(config)
+collectors << ResqueToCloudwatch::WorkersAliveCollector.new(config)
 $log.info "Collectors in use: #{collectors.join(", ")}"
 
 
