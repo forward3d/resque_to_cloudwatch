@@ -7,6 +7,7 @@ It collects and pushes the following metrics:
 * number of jobs in all Resque queues (`resque_queues`)
 * number of workers currently working (`resque_workers_working`)
 * number of workers currently alive (`resque_workers_alive`)
+* work remaining, which is workers working + queue length (`resque_work_remaining`)
 
 ## Usage
 
