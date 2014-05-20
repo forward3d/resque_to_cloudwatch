@@ -30,6 +30,7 @@ collectors = []
 collectors << ResqueToCloudwatch::QueueLengthCollector.new(config)
 collectors << ResqueToCloudwatch::WorkersWorkingCollector.new(config)
 collectors << ResqueToCloudwatch::WorkersAliveCollector.new(config)
+collectors << ResqueToCloudwatch::WorkRemainingCollector.new(config)
 $log.info "Collectors in use: #{collectors.join(", ")}"
 
 
