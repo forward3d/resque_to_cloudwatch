@@ -17,6 +17,10 @@ module ResqueToCloudwatch
       raise "Config file #{path} is empty" unless @hash
       validate_config
       @hash.each_pair do |opt,value|
+        # Support old-style where region is not an array
+        if opt == 'region' && value.is_a?(String)
+          value = [value]
+        end
         instance_variable_set("@#{opt}", value)
         $log.info "Config parameter: #{opt} is #{value}"
       end
@@ -24,8 +28,7 @@ module ResqueToCloudwatch
       # Set up AWS credentials
       AWS.config(
         :access_key_id => @hash['access_key_id'],
-        :secret_access_key => @hash['secret_access_key'],
-        :region => @hash['region']
+        :secret_access_key => @hash['secret_access_key']
       )
     end
     
