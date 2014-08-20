@@ -24,7 +24,8 @@ The config file has the following format (in YAML):
 
     access_key_id: asdfasfasd
     secret_access_key: asdfasdfasf
-    region: us-west-2
+    region: 
+     - us-west-2
     project: testing
     hostname: laptop
     redis_host: some.redis.host
@@ -38,7 +39,8 @@ Your AWS access key/secret key pair.
 
 #### `region`
 
-Region of Cloudwatch the metrics should be submitted to.
+Region(s) of Cloudwatch the metrics should be submitted to. This can either be a string, or
+a list of regions to send the metric to.
 
 #### `project`, `namespace`, `hostname`
 
