@@ -74,7 +74,7 @@ module ResqueToCloudwatch
 
     def get_value
       redis = Redis.new(:host => @config.redis_host, :port => @config.redis_port)
-      redis.llen("resque:queue:failed")
+      redis.llen("resque:failed")
     end
 
     def metric_name
