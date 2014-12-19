@@ -66,6 +66,27 @@ module ResqueToCloudwatch
 
   end
 
+  class FailedQueueLengthCollector
+
+    def initialize(config)
+      @config = config
+    end
+
+    def get_value
+      redis = Redis.new(:host => @config.redis_host, :port => @config.redis_port)
+      redis.llen("resque:queue:failed")
+    end
+
+    def metric_name
+      "failed_queue_resque_queue"
+    end
+
+    def to_s
+      metric_name
+    end
+
+  end
+
   class WorkersWorkingCollector
     
     def initialize(config)
