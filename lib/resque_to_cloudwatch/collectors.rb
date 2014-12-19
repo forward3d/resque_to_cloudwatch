@@ -21,7 +21,51 @@ module ResqueToCloudwatch
     end
     
   end
-  
+
+  class HighPriorityQueueLengthCollector
+
+    def initialize(config)
+      @config = config
+    end
+
+    def get_value
+      redis = Redis.new(:host => @config.redis_host, :port => @config.redis_port)
+      %w[ instant date_and_time ].map do |queue_key|
+        redis.llen("resque:queue:#{queue_key}")
+      end.reduce(:+)
+    end
+
+    def metric_name
+      "high_priority_resque_queues"
+    end
+
+    def to_s
+      metric_name
+    end
+
+  end
+
+  class MiniQueueQueueLengthCollector
+
+    def initialize(config)
+      @config = config
+    end
+
+    def get_value
+      redis = Redis.new(:host => @config.redis_host, :port => @config.redis_port)
+      redis.llen("resque:queue:mini_queue")
+    end
+
+    def metric_name
+      "mini_queue_resque_queue"
+    end
+
+    def to_s
+      metric_name
+    end
+
+  end
+
   class WorkersWorkingCollector
     
     def initialize(config)
