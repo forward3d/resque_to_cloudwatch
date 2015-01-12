@@ -108,7 +108,7 @@ module ResqueToCloudwatch
 
   end
 
-  class DoQueueLengthCollector
+  class DoRecipesQueueLengthCollector
 
     def initialize(config)
       @config = config
@@ -116,7 +116,7 @@ module ResqueToCloudwatch
 
     def get_value
       redis = Redis.new(:host => @config.redis_host, :port => @config.redis_port)
-      redis.llen("resque:queue:do_queue")
+      redis.llen("resque:queue:do_recipes")
     end
 
     def metric_name

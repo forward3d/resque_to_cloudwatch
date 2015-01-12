@@ -30,7 +30,7 @@ collectors = []
 collectors << ResqueToCloudwatch::QueueLengthCollector.new(config)
 collectors << ResqueToCloudwatch::HighPriorityQueueLengthCollector.new(config)
 collectors << ResqueToCloudwatch::MiniQueueQueueLengthCollector.new(config)
-collectors << ResqueToCloudwatch::DoQueueLengthCollector.new(config)
+collectors << ResqueToCloudwatch::DoRecipesQueueLengthCollector.new(config)
 collectors << ResqueToCloudwatch::InstantQueueLengthCollector.new(config)
 collectors << ResqueToCloudwatch::DateTimeQueueLengthCollector.new(config)
 collectors << ResqueToCloudwatch::FailedQueueLengthCollector.new(config)
