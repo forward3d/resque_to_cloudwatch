@@ -66,6 +66,69 @@ module ResqueToCloudwatch
 
   end
 
+  class InstantQueueLengthCollector
+
+    def initialize(config)
+      @config = config
+    end
+
+    def get_value
+      redis = Redis.new(:host => @config.redis_host, :port => @config.redis_port)
+      redis.llen("resque:queue:instant")
+    end
+
+    def metric_name
+      "instant_resque_queue"
+    end
+
+    def to_s
+      metric_name
+    end
+
+  end
+
+  class DateTimeQueueLengthCollector
+
+    def initialize(config)
+      @config = config
+    end
+
+    def get_value
+      redis = Redis.new(:host => @config.redis_host, :port => @config.redis_port)
+      redis.llen("resque:queue:date_and_time")
+    end
+
+    def metric_name
+      "datetime_resque_queue"
+    end
+
+    def to_s
+      metric_name
+    end
+
+  end
+
+  class DoQueueLengthCollector
+
+    def initialize(config)
+      @config = config
+    end
+
+    def get_value
+      redis = Redis.new(:host => @config.redis_host, :port => @config.redis_port)
+      redis.llen("resque:queue:do_queue")
+    end
+
+    def metric_name
+      "do_resque_queue"
+    end
+
+    def to_s
+      metric_name
+    end
+
+  end
+
   class FailedQueueLengthCollector
 
     def initialize(config)
