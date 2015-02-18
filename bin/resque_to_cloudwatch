@@ -37,6 +37,8 @@ collectors << ResqueToCloudwatch::FailedQueueLengthCollector.new(config)
 collectors << ResqueToCloudwatch::WorkersWorkingCollector.new(config)
 collectors << ResqueToCloudwatch::WorkersAliveCollector.new(config)
 collectors << ResqueToCloudwatch::WorkRemainingCollector.new(config)
+collectors << ResqueToCloudwatch::ResqueSchedulerDelayedQueueLengthCollector.new(config)
+collectors << ResqueToCloudwatch::ResqueSchedulerDelayedQueueDriftCollector.new(config)
 $log.info "Collectors in use: #{collectors.join(", ")}"
 
 

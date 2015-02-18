@@ -220,5 +220,44 @@ module ResqueToCloudwatch
     end
     
   end
-  
+
+  class ResqueSchedulerDelayedQueueLengthCollector
+
+    def initialize(config)
+      @config = config
+    end
+
+    def get_value
+      redis = Redis.new(:host => @config.redis_host, :port => @config.redis_port)
+      redis.zcard('resque:delayed_queue_schedule')
+    end
+
+    def metric_name
+      "resque_scheduler_delayed_queue"
+    end
+
+    def to_s
+      metric_name
+    end
+  end
+
+  class ResqueSchedulerDelayedQueueDriftCollector
+
+    def initialize(config)
+      @config = config
+    end
+
+    def get_value
+      redis = Redis.new(:host => @config.redis_host, :port => @config.redis_port)
+      timestamp = redis.zrange('resque:delayed_queue_schedule', 0, 0).first.to_i
+      drift = timestamp - Time.now.to_i
+    end
+
+    def metric_name
+      "resque_scheduler_delayed_queue_drift"
+    end
+
+    def to_s
+      metric_name
+    end
 end
