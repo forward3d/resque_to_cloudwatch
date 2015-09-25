@@ -1,4 +1,5 @@
 require 'yaml'
+require 'erb'
 require 'aws-sdk'
 
 module ResqueToCloudwatch
@@ -13,7 +14,7 @@ module ResqueToCloudwatch
       $log.info "Loading configuration"
       raise "Config file #{path} not found or readable" unless File.exists?(path)
       @required_opts = %w{access_key_id secret_access_key project period region redis_host redis_port namespace}
-      @hash = YAML.load_file(path)
+      @hash = YAML.load(ERB.new(File.read(path)).result) rescue nil
       raise "Config file #{path} is empty" unless @hash
       validate_config
       @hash.each_pair do |opt,value|
